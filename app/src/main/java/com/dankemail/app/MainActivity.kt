@@ -3,17 +3,12 @@ package com.dankemail.app
 
 import android.app.Activity
 import android.os.Bundle
-import android.content.Intent
 import android.graphics.Color
-import android.view.ViewGroup
-import android.webkit.WebResourceRequest
+import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.FrameLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
+import android.webkit.WebResourceRequest
+import android.content.Intent
 
 class MainActivity : Activity() {
 
@@ -25,24 +20,18 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-
         window.statusBarColor = Color.WHITE
         window.navigationBarColor = Color.WHITE
 
-        val root = FrameLayout(this)
-
-        val controller = WindowInsetsControllerCompat(window, root)
-        controller.isAppearanceLightStatusBars = true
-        controller.isAppearanceLightNavigationBars = true
+        window.decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or
+            View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
 
         webView = WebView(this)
 
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
         webView.settings.loadsImagesAutomatically = true
-
-        webView.setBackgroundColor(Color.WHITE)
 
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(
@@ -62,32 +51,7 @@ class MainActivity : Activity() {
             }
         }
 
-        root.addView(
-            webView,
-            FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-        )
-
-        ViewCompat.setOnApplyWindowInsetsListener(root) { view, insets ->
-            val bars = insets.getInsets(
-                WindowInsetsCompat.Type.systemBars()
-            )
-
-            view.setPadding(
-                bars.left,
-                bars.top,
-                bars.right,
-                bars.bottom
-            )
-
-            insets
-        }
-
-        setContentView(root)
-        ViewCompat.requestApplyInsets(root)
-
+        setContentView(webView)
         webView.loadUrl(appUrl)
     }
 
