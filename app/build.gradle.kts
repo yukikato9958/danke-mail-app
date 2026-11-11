@@ -11,9 +11,9 @@ android {
     defaultConfig {
         applicationId = "com.dankemail.app"
         minSdk = 23
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        targetSdk = 34
+        versionCode = 2
+        versionName = "1.1"
     }
 
     compileOptions {
@@ -24,8 +24,4 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-}
-
-dependencies {
-    implementation("androidx.core:core-ktx:1.15.0")
 }
