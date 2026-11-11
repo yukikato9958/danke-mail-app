@@ -27,8 +27,8 @@ class MainActivity : Activity() {
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        window.statusBarColor = Color.TRANSPARENT
-        window.navigationBarColor = Color.TRANSPARENT
+        window.statusBarColor = Color.WHITE
+        window.navigationBarColor = Color.WHITE
 
         val root = FrameLayout(this)
 
@@ -82,7 +82,7 @@ class MainActivity : Activity() {
                 bars.bottom
             )
 
-            WindowInsetsCompat.CONSUMED
+            insets
         }
 
         setContentView(root)
