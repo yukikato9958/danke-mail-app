@@ -3,11 +3,12 @@ package com.dankemail.app
 
 import android.app.Activity
 import android.os.Bundle
+import android.graphics.Color
+import android.view.WindowInsets
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.content.Intent
-import android.net.Uri
 
 class MainActivity : Activity() {
 
@@ -19,11 +20,34 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        window.statusBarColor = Color.WHITE
+        window.navigationBarColor = Color.WHITE
+        window.decorView.systemUiVisibility =
+            android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or
+            android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+
         webView = WebView(this)
 
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
         webView.settings.loadsImagesAutomatically = true
+
+        webView.setBackgroundColor(Color.WHITE)
+
+        webView.setOnApplyWindowInsetsListener { view, insets ->
+            val bars = insets.getInsets(
+                WindowInsets.Type.systemBars()
+            )
+
+            view.setPadding(
+                0,
+                bars.top,
+                0,
+                bars.bottom
+            )
+
+            insets
+        }
 
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(
@@ -32,18 +56,19 @@ class MainActivity : Activity() {
             ): Boolean {
                 val uri = request.url
 
-                return if (uri.host == "imap-production-5bceae6f.up.railway.app") {
+                return if (
+                    uri.host == "imap-production-5bceae6f.up.railway.app"
+                ) {
                     false
                 } else {
-                    startActivity(
-                        Intent(Intent.ACTION_VIEW, uri)
-                    )
+                    startActivity(Intent(Intent.ACTION_VIEW, uri))
                     true
                 }
             }
         }
 
         setContentView(webView)
+        webView.requestApplyInsets()
         webView.loadUrl(appUrl)
     }
 
